@@ -45,6 +45,26 @@ public class APITest {
             .statusCode(400)
             .body("message", CoreMatchers.is("Due date must not be in past"));
     }
+
+    @Test
+    public void deveRemoverTarefaComSucesso() {
+        //inserir
+        Integer id = RestAssured.given() //dado
+            .body("{ \"task\": \"Tarefa para remoção\", \"dueDate\": \"2030-12-08\" }")
+            .contentType(ContentType.JSON)
+        .when() //quando
+            .post("/todo")
+        .then() //então
+            .statusCode(201)
+            .extract().path("id");
+
+        //remover
+        RestAssured.given()
+        .when()
+            .delete("/todo/" + id)
+        .then()
+            .statusCode(204);
+    }
 }
 
 
